@@ -9,6 +9,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, lowercase: true },
   password: String,
   profile: { type: Schema.Types.ObjectId, ref: 'Profile' },
+  role: Number,
 }, {
   timestamps: true,
 })
