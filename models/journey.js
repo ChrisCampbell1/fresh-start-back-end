@@ -10,7 +10,6 @@ const reviewSchema = new Schema({
   timestamps: true,
 })
 
-
 const journeySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
