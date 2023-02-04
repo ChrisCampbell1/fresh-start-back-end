@@ -1,4 +1,4 @@
-import { Journey } from '../models/journey'
+import { Journey } from '../models/journey.js'
 
 const index = async (req, res) => {
   try {
@@ -7,6 +7,16 @@ const index = async (req, res) => {
       .populate('reviews.author')
     journeys.sort((a, b) => a.subscribers.length - b.subscribers.length)
     res.status(200).json(journeys)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+const create = async (req, res) => {
+  try {
+    const journey = await Journey.create(req.body)
+    res.status(201).json(journey)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -27,4 +37,5 @@ const index = async (req, res) => {
 
 export {
   index,
+  create,
 }
