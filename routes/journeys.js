@@ -12,5 +12,6 @@ router.get('/:id', journeysCtrl.show)
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, journeysCtrl.create)
 router.post('/:id/reviews', checkAuth, journeysCtrl.createReview)
+router.delete('/:id/reviews/:reviewId', checkAuth, journeysCtrl.deleteReview)
 
 export { router }
