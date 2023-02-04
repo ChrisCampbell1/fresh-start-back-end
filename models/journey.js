@@ -13,7 +13,7 @@ const reviewSchema = new Schema({
 const journeySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  subscribers: { type: Schema.Types.ObjectId, ref: 'Profile' },
+  subscribers: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
   reviews: [reviewSchema],
 })
 
