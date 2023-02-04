@@ -34,6 +34,23 @@ const show = async (req, res) => {
   }
 }
 
+const addSubscriber = async (req, res) => {
+  try {
+    const journey = await Journey.findById(req.params.id)
+    journey.subscribers.push(req.user.profile)
+    await journey.save()
+
+    const profile = await Profile.findById(req.user.profile)
+    profile.journeys.push(req.params.id)
+    await profile.save()
+
+    res.status(200).json(profile)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const createReview = async (req, res) => {
   try {
     req.body.author = req.user.profile
@@ -79,6 +96,7 @@ export {
   index,
   create,
   show,
+  addSubscriber,
   createReview,
   deleteReview,
 }
