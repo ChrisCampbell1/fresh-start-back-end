@@ -11,5 +11,6 @@ router.get('/:id', journeysCtrl.show)
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, journeysCtrl.create)
+router.post('/:id/reviews', checkAuth, journeysCtrl.createReview)
 
 export { router }

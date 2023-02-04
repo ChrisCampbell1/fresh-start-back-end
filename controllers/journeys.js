@@ -1,4 +1,5 @@
 import { Journey } from '../models/journey.js'
+import { Profile } from '../models/profile.js'
 
 const index = async (req, res) => {
   try {
@@ -33,6 +34,24 @@ const show = async (req, res) => {
   }
 }
 
+const createReview = async (req, res) => {
+  try {
+    req.body.author = req.user.profile
+    const journey = await Journey.findById(req.params.id)
+    journey.reviews.push(req.body)
+    await journey.save()
+
+    const newReview = journey.reviews[journey.reviews.length - 1]
+    const profile = await Profile.findById(req.user.profile)
+    newReview.author = profile
+
+    res.status(201).json(newReview)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 // Controller Stub
 
 // const index = async (req, res) => {
@@ -44,9 +63,9 @@ const show = async (req, res) => {
 //   }
 // }
 
-
 export {
   index,
   create,
   show,
+  createReview
 }
