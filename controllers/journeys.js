@@ -55,13 +55,9 @@ const createReview = async (req, res) => {
 const deleteReview = async (req, res) => {
   try {
     const journey = await Journey.findById(req.params.id)
-
-    const deletedReview = journey.reviews.id(req.params.reviewId)
-
     journey.reviews.pull(req.params.reviewId)
     await journey.save()
-
-    res.status(200).json(deletedReview)
+    res.status(200).json({ msg: 'OK' })
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
