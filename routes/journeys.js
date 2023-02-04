@@ -6,6 +6,7 @@ const router = Router()
 
 /*---------- Public Routes ----------*/
 router.get('/', journeysCtrl.index)
+router.get('/:id', journeysCtrl.show)
 
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
