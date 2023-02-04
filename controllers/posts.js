@@ -19,12 +19,18 @@ const create = async (req, res) => {
     // might need to handle photo data here
 
     const post = await Post.create(req.body)
+    const profile = await Profile.findByIdAndUpdate(req.user.profile,
+      { $push: {posts: post} },
+      { new: true }
+    )
+    post.author = profile
     res.status(201).json(post)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
   }
 }
+
 
 // Controller Stub
 
