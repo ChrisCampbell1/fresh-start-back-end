@@ -12,6 +12,20 @@ const index = async (req, res) => {
   }
 }
 
+const create = async (req, res) => {
+  try {
+    req.body.author = req.user.profile
+
+    // might need to handle photo data here
+
+    const post = await Post.create(req.body)
+    res.status(201).json(post)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 // Controller Stub
 
 // const index = async (req, res) => {
@@ -24,5 +38,6 @@ const index = async (req, res) => {
 // }
 
 export {
-  index
+  index,
+  create,
 }
