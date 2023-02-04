@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import * as journeysCtrl from '../controllers/journeys.js'
-import { decodeUserFromToken, checkAuth, isAdmin } from '../middleware/auth.js'
+import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 
 const router = Router()
 
