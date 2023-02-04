@@ -51,6 +51,23 @@ const addSubscriber = async (req, res) => {
   }
 }
 
+const removeSubscriber = async (req, res) => {
+  try {
+    const journey = await Journey.findById(req.params.id)
+    journey.subscribers.pull(req.user.profile)
+    await journey.save()
+
+    const profile = await Profile.findById(req.user.profile)
+    profile.journeys.pull(req.params.id)
+    await profile.save()
+
+    res.status(200).json({ msg: 'OK' })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const createReview = async (req, res) => {
   try {
     req.body.author = req.user.profile
@@ -97,6 +114,7 @@ export {
   create,
   show,
   addSubscriber,
+  removeSubscriber,
   createReview,
   deleteReview,
 }
