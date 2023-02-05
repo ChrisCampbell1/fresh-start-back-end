@@ -15,6 +15,7 @@ const journeySchema = new Schema({
   description: { type: String, required: true },
   subscribers: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
   reviews: [reviewSchema],
+  photo: {type: String},
 })
 
 const Journey = mongoose.model('Journey', journeySchema)

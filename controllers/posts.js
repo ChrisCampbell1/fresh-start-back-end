@@ -1,5 +1,6 @@
 import { Post } from '../models/post.js'
 import { Profile } from '../models/profile.js'
+import { v2 as cloudinary } from 'cloudinary'
 
 const index = async (req, res) => {
   try {
@@ -72,9 +73,15 @@ const deletePost = async (req, res) => {
 const addLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    post.likes.push(req.user.profile)
-    await post.save()
-    res.status(204).json({ msg: 'OK' })
+    const userProfile = req.user.profile;
+    const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index === -1) {
+      post.likes.push(userProfile)
+      await post.save()
+      res.status(204).json({ msg: 'OK' })
+    } else {
+      res.status(400).json({ msg: 'Duplicate like from the same user' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -84,14 +91,21 @@ const addLike = async (req, res) => {
 const removeLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    post.likes.pull(req.user.profile)
-    await post.save()
-    res.status(204).json({ msg: 'OK' })
+    const userProfile = req.user.profile;
+    const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index !== -1) {
+      post.likes.pull(userProfile)
+      await post.save()
+      res.status(204).json({ msg: 'OK' })
+    } else {
+      res.status(400).json({ msg: 'Profile not found in the likes array' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
   }
 }
+
 
 const createComment = async (req, res) => {
   try {
@@ -124,6 +138,26 @@ const deleteComment = async (req, res) => {
   }
 }
 
+
+function addPhoto(req, res) {
+  const imageFile = req.files.photo.path
+  Post.findById(req.params.id)
+  .then(post => {
+    cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
+    .then(image => {
+      post.photo = image.url
+      post.save()
+      .then(post => {
+        res.status(201).json(post.photo)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  })
+}
+
 // Controller Stub
 
 // const index = async (req, res) => {
@@ -145,4 +179,5 @@ export {
   removeLike,
   createComment,
   deleteComment,
+  addPhoto,
 }
