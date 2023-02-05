@@ -13,7 +13,7 @@ router.use(decodeUserFromToken)
 router.post('/', checkAuth, journeysCtrl.create)
 
 router.post('/:id/subscribers', checkAuth, journeysCtrl.addSubscriber)
-router.delete('/:id/subscribers/:subscriberId', checkAuth, journeysCtrl.removeSubscriber)
+router.delete('/:id/subscribers', checkAuth, journeysCtrl.removeSubscriber)
 
 router.post('/:id/reviews', checkAuth, journeysCtrl.createReview)
 router.delete('/:id/reviews/:reviewId', checkAuth, journeysCtrl.deleteReview)
