@@ -4,6 +4,8 @@ import { Profile } from '../models/profile.js'
 const index = async (req, res) => {
   try {
     const posts = await Post.find({})
+      .populate('author', 'name')
+      .populate('journey', 'name')
     posts.sort((a, b) => a.likes.length - b.likes.length)
     res.status(200).json(posts)
   } catch (err) {
@@ -31,6 +33,30 @@ const create = async (req, res) => {
   }
 }
 
+const show = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate('author', 'name')
+      .populate('journey', 'name')
+      .populate('comments.author', 'name')
+    res.status(200).json(post)
+  } catch (err) { 
+    console.log(err);
+    res.status(500).json(err)
+  }
+}
+
+const deletePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id)
+    const profile = await Profile.findById(req.user.profile)
+    profile.posts.pull(req.params.id)
+    await profile.save()
+    res.status(200).json(post)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
 
 // Controller Stub
 
@@ -46,4 +72,6 @@ const create = async (req, res) => {
 export {
   index,
   create,
+  show,
+  deletePost as delete,
 }

@@ -61,7 +61,7 @@ const removeSubscriber = async (req, res) => {
     profile.journeys.pull(req.params.id)
     await profile.save()
 
-    res.status(200).json({ msg: 'OK' })
+    res.status(204).json({ msg: 'OK' })
   } catch (err) {
     console.log(err)
     res.status(500).json(err)

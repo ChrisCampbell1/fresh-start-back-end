@@ -10,5 +10,7 @@ router.get('/', postsCtrl.index)
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, postsCtrl.create)
+router.get('/:id', checkAuth, postsCtrl.show)
+router.delete('/:id', checkAuth, postsCtrl.delete)
 
 export { router }
