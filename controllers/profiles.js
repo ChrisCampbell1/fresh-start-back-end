@@ -29,6 +29,20 @@ function addPhoto(req, res) {
   })
 }
 
+const show = async (req, res) => {
+  try {
+    const profile = await Profile.findById(req.params.id)
+      .populate('followers', ['name', 'photo'])
+      .populate('following', ['name', 'photo'])
+      .populate('journeys', 'name')
+      .populate('posts')
+    res.status(200).json(profile)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const follow = async (req, res) => {
   try {
     const followedProfile = await Profile.findById(req.params.id)
@@ -77,6 +91,7 @@ const unfollow = async (req, res) => {
 export {
   index,
   addPhoto,
+  show,
   follow,
   unfollow,
 }
