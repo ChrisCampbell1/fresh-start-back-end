@@ -29,4 +29,36 @@ function addPhoto(req, res) {
   })
 }
 
-export { index, addPhoto }
+const follow = async (req, res) => {
+  try {
+    const followedProfile = await Profile.findById(req.params.id)
+    followedProfile.followers.push(req.user.profile)
+    await followedProfile.save()
+
+    const followingProfile = await Profile.findById(req.user.profile)
+    followingProfile.following.push(req.params.id)
+    await followingProfile.save()
+
+    res.status(204).json({ msg: 'OK' })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+// Controller Stub
+
+// const index = async (req, res) => {
+//   try {
+
+//   } catch (err) {
+//     console.log(err)
+//     res.status(500).json(err)
+//   }
+// }
+
+export {
+  index,
+  addPhoto,
+  follow,
+}
