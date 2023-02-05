@@ -14,6 +14,8 @@ router.get('/:id', checkAuth, postsCtrl.show)
 router.put('/:id', checkAuth, postsCtrl.update)
 router.delete('/:id', checkAuth, postsCtrl.delete)
 
+router.post('/:id/likes', checkAuth, postsCtrl.addLike)
+
 router.post('/:id/comments', checkAuth, postsCtrl.createComment)
 router.delete('/:id/comments/:commentId', checkAuth, postsCtrl.deleteComment)
 

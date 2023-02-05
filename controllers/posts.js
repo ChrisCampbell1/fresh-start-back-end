@@ -69,6 +69,18 @@ const deletePost = async (req, res) => {
   }
 }
 
+const addLike = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    post.likes.push(req.user.profile)
+    await post.save()
+    res.status(204).json({ msg: 'OK' })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const createComment = async (req, res) => {
   try {
     req.body.author = req.user.profile
@@ -117,6 +129,8 @@ export {
   show,
   update,
   deletePost as delete,
+  addLike,
+
   createComment,
   deleteComment,
 }

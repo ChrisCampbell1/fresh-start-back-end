@@ -16,8 +16,8 @@ const postSchema = new Schema({
   journey: { type: Schema.Types.ObjectId, ref: 'Journey' },
   content: { type: String, required: true },
   photos: [String],
-  comments: [commentSchema],
   likes: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
+  comments: [commentSchema],
 }, {
   timestamps: true,
 })
