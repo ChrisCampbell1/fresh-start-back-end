@@ -46,6 +46,17 @@ const show = async (req, res) => {
   }
 }
 
+const update = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .populate('author', 'name')
+    res.status(200).json(post)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.id)
@@ -73,5 +84,6 @@ export {
   index,
   create,
   show,
+  update,
   deletePost as delete,
 }
