@@ -1,5 +1,6 @@
 import { Post } from '../models/post.js'
 import { Profile } from '../models/profile.js'
+import { v2 as cloudinary } from 'cloudinary'
 
 const index = async (req, res) => {
   try {
@@ -137,6 +138,26 @@ const deleteComment = async (req, res) => {
   }
 }
 
+
+function addPhoto(req, res) {
+  const imageFile = req.files.photo.path
+  Post.findById(req.params.id)
+  .then(post => {
+    cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
+    .then(image => {
+      post.photo = image.url
+      post.save()
+      .then(post => {
+        res.status(201).json(post.photo)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+  })
+}
+
 // Controller Stub
 
 // const index = async (req, res) => {
@@ -158,4 +179,5 @@ export {
   removeLike,
   createComment,
   deleteComment,
+  addPhoto,
 }

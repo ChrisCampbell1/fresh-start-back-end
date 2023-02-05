@@ -15,9 +15,9 @@ const postSchema = new Schema({
   category: { type: String, enum: ['Food', 'Fitness', 'Blog Entry'], required: true },
   journey: { type: Schema.Types.ObjectId, ref: 'Journey' },
   content: { type: String, required: true },
-  photos: [String],
   likes: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
   comments: [commentSchema],
+  photo: String,
 }, {
   timestamps: true,
 })
