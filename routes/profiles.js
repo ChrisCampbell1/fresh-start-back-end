@@ -11,6 +11,7 @@ const router = Router()
 router.use(decodeUserFromToken)
 router.get('/', checkAuth, profilesCtrl.index)
 router.post('/:id', checkAuth, profilesCtrl.follow)
+router.delete('/:id', checkAuth, profilesCtrl.unfollow)
 router.put('/:id/add-photo', checkAuth, profilesCtrl.addPhoto)
 
 export { router }
