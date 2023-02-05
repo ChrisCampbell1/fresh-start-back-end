@@ -88,6 +88,17 @@ const createComment = async (req, res) => {
   }
 }
 
+const deleteComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    post.comments.pull(req.params.commentId)
+    await post.save()
+    res.status(200).json({ msg: 'OK' })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err)
+  }
+}
 
 // Controller Stub
 
@@ -107,4 +118,5 @@ export {
   update,
   deletePost as delete,
   createComment,
+  deleteComment,
 }
