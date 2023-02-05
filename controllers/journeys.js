@@ -37,14 +37,20 @@ const show = async (req, res) => {
 const addSubscriber = async (req, res) => {
   try {
     const journey = await Journey.findById(req.params.id)
-    journey.subscribers.push(req.user.profile)
-    await journey.save()
+    const userProfile = req.user.profile;
+    const index = journey.subscribers.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index === -1) {
+      journey.subscribers.push(userProfile)
+      await journey.save()
 
-    const profile = await Profile.findById(req.user.profile)
-    profile.journeys.push(req.params.id)
-    await profile.save()
+      const profile = await Profile.findById(req.user.profile)
+      profile.journeys.push(req.params.id)
+      await profile.save()
 
-    res.status(200).json(profile)
+      res.status(200).json(profile)
+    } else {
+      res.status(400).json({ msg: 'Duplicate subscription from the same user' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -54,14 +60,20 @@ const addSubscriber = async (req, res) => {
 const removeSubscriber = async (req, res) => {
   try {
     const journey = await Journey.findById(req.params.id)
-    journey.subscribers.pull(req.user.profile)
-    await journey.save()
+    const userProfile = req.user.profile;
+    const index = journey.subscribers.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index !== -1) {
+      journey.subscribers.pull(userProfile)
+      await journey.save()
 
-    const profile = await Profile.findById(req.user.profile)
-    profile.journeys.pull(req.params.id)
-    await profile.save()
+      const profile = await Profile.findById(req.user.profile)
+      profile.journeys.pull(req.params.id)
+      await profile.save()
 
-    res.status(204).json({ msg: 'OK' })
+      res.status(204).json({ msg: 'OK' })
+    } else {
+      res.status(400).json({ msg: 'User is not subscribed to this journey' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
