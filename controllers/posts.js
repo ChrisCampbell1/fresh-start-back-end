@@ -90,14 +90,21 @@ const addLike = async (req, res) => {
 const removeLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    post.likes.pull(req.user.profile)
-    await post.save()
-    res.status(204).json({ msg: 'OK' })
+    const userProfile = req.user.profile;
+    const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index !== -1) {
+      post.likes.pull(userProfile)
+      await post.save()
+      res.status(204).json({ msg: 'OK' })
+    } else {
+      res.status(400).json({ msg: 'Profile not found in the likes array' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
   }
 }
+
 
 const createComment = async (req, res) => {
   try {
