@@ -72,9 +72,15 @@ const deletePost = async (req, res) => {
 const addLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    post.likes.push(req.user.profile)
-    await post.save()
-    res.status(204).json({ msg: 'OK' })
+    const userProfile = req.user.profile;
+    const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
+    if (index === -1) {
+      post.likes.push(userProfile)
+      await post.save()
+      res.status(204).json({ msg: 'OK' })
+    } else {
+      res.status(400).json({ msg: 'Duplicate like from the same user' })
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
