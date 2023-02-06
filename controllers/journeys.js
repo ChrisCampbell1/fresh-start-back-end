@@ -25,14 +25,12 @@ const create = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    console.log(`Received request for journey with id: ${req.params.id}`)
     const journey = await Journey.findById(req.params.id)
       .populate({path: 'subscribers', select: ['name', 'journeys']})
       .populate('reviews.author', ['name', 'photo'])
     console.log(`Retrieved journey:`, journey)
     res.status(200).json(journey)
   } catch (err) {
-    console.error(`Error retrieving journey:`, err)
     res.status(500).json(err)
   }
 }
