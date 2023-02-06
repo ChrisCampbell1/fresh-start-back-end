@@ -10,24 +10,19 @@ function index(req, res) {
   })
 }
 
-function addPhoto(req, res) {
-  const imageFile = req.files.photo.path
-  Profile.findById(req.params.id)
-  .then(profile => {
-    cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
-    .then(image => {
-      profile.photo = image.url
-      profile.save()
-      .then(profile => {
-        res.status(201).json(profile.photo)
-      })
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
-  })
-}
+const addPhoto = async(req, res) => {
+  try {
+    const imageFile = req.files.photo.path
+    const profile = await Profile.findById(req.params.id);
+    const image = await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` });
+    profile.photo = image.url;
+    const savedProfile = await profile.save();
+    res.status(201).json(savedProfile.photo);
+    } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+    }
+  }
 
 const show = async (req, res) => {
   try {
@@ -76,17 +71,6 @@ const unfollow = async (req, res) => {
     res.status(500).json(err)
   }
 }
-
-// Controller Stub
-
-// const index = async (req, res) => {
-//   try {
-
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json(err)
-//   }
-// }
 
 export {
   index,

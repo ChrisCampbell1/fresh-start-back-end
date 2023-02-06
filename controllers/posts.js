@@ -139,35 +139,19 @@ const deleteComment = async (req, res) => {
 }
 
 
-function addPhoto(req, res) {
-  const imageFile = req.files.photo.path
-  Post.findById(req.params.id)
-  .then(post => {
-    cloudinary.uploader.upload(imageFile, {tags: `${req.user.email}`})
-    .then(image => {
-      post.photo = image.url
-      post.save()
-      .then(post => {
-        res.status(201).json(post.photo)
-      })
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
-  })
-}
-
-// Controller Stub
-
-// const index = async (req, res) => {
-//   try {
-
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json(err)
-//   }
-// }
+const addPhoto = async(req, res) => {
+  try {
+    const imageFile = req.files.photo.path
+    const post = await Post.findById(req.params.id);
+    const image = await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` });
+    post.photo = image.url;
+    const savedPost = await post.save();
+    res.status(201).json(savedPost.photo);
+    } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+    }
+  }
 
 export {
   index,

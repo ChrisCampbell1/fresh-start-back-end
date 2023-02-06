@@ -1,5 +1,6 @@
 import { Journey } from '../models/journey.js'
 import { Profile } from '../models/profile.js'
+import { v2 as cloudinary } from 'cloudinary'
 
 const index = async (req, res) => {
   try {
@@ -110,16 +111,20 @@ const deleteReview = async (req, res) => {
   }
 }
 
-// Controller Stub
+const addPhoto = async (req, res) => {
+  try {
+    const imageFile = req.files.photo.path
+    const journey = await Journey.findById(req.params.id);
+    const image = await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` });
+    journey.photo = image.url;
+    const savedJourney = await journey.save();
+    res.status(201).json(savedJourney.photo);
+    } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+}
 
-// const index = async (req, res) => {
-//   try {
-
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json(err)
-//   }
-// }
 
 export {
   index,
@@ -129,4 +134,5 @@ export {
   removeSubscriber,
   createReview,
   deleteReview,
+  addPhoto
 }
