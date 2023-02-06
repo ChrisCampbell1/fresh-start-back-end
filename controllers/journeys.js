@@ -26,11 +26,11 @@ const create = async (req, res) => {
 const show = async (req, res) => {
   try {
     const journey = await Journey.findById(req.params.id)
-      .populate({path: 'subscribers', select: ['name', 'journeys'], populate: {path: 'journeys', select: 'name'}})
+      .populate({path: 'subscribers', select: ['name', 'journeys']})
       .populate('reviews.author', ['name', 'photo'])
+    console.log(`Retrieved journey:`, journey)
     res.status(200).json(journey)
   } catch (err) {
-    console.log(err)
     res.status(500).json(err)
   }
 }
