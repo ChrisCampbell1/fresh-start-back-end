@@ -72,17 +72,6 @@ const unfollow = async (req, res) => {
   }
 }
 
-// Controller Stub
-
-// const index = async (req, res) => {
-//   try {
-
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json(err)
-//   }
-// }
-
 export {
   index,
   addPhoto,
