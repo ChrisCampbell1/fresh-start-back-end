@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary'
 const index = async (req, res) => {
   try {
     const posts = await Post.find({})
-      .populate('author', 'name')
+      .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
     posts.sort((a, b) => a.likes.length - b.likes.length)
     res.status(200).json(posts)
@@ -37,7 +37,7 @@ const create = async (req, res) => {
 const show = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-      .populate('author', 'name')
+      .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
       .populate('comments.author', 'name')
     res.status(200).json(post)
