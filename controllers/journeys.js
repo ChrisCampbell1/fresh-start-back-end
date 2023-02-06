@@ -114,11 +114,11 @@ const deleteReview = async (req, res) => {
 const addPhoto = async (req, res) => {
   try {
     const imageFile = req.files.photo.path
-    const post = await Journey.findById(req.params.id);
+    const journey = await Journey.findById(req.params.id);
     const image = await cloudinary.uploader.upload(imageFile, { tags: `${req.user.email}` });
-    post.photo = image.url;
-    const savedPost = await post.save();
-    res.status(201).json(savedPost.photo);
+    journey.photo = image.url;
+    const savedJourney = await journey.save();
+    res.status(201).json(savedJourney.photo);
     } catch (err) {
     console.log(err);
     res.status(500).json(err);
