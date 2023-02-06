@@ -10,7 +10,7 @@ function index(req, res) {
   })
 }
 
-async function addPhoto(req, res) {
+const addPhoto = async(req, res) => {
   try {
     const imageFile = req.files.photo.path
     const profile = await Profile.findById(req.params.id);

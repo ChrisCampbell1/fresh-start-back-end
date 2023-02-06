@@ -139,7 +139,7 @@ const deleteComment = async (req, res) => {
 }
 
 
-async function addPhoto(req, res) {
+const addPhoto = async(req, res) => {
   try {
     const imageFile = req.files.photo.path
     const post = await Post.findById(req.params.id);
