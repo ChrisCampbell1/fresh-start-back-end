@@ -12,7 +12,7 @@ const commentSchema = new Schema({
 const postSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'Profile' },
   title: { type: String, required: true },
-  category: { type: String, enum: ['Food', 'Fitness', 'Blog Entry'], required: true },
+  category: { type: String, enum: ['Food', 'Fitness', 'BlogEntry'], required: true },
   journey: { type: Schema.Types.ObjectId, ref: 'Journey' },
   content: { type: String, required: true },
   likes: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
