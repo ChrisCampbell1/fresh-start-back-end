@@ -4,7 +4,8 @@ import { v2 as cloudinary } from 'cloudinary'
 
 const index = async (req, res) => {
   try {
-    const posts = await Post.find({})
+    const profile = await Profile.findById(req.user.profile)
+    const posts = await Post.find({ author: profile.following })
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
     posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
@@ -18,9 +19,6 @@ const index = async (req, res) => {
 const create = async (req, res) => {
   try {
     req.body.author = req.user.profile
-
-    // might need to handle photo data here
-
     const post = await Post.create(req.body)
     const profile = await Profile.findByIdAndUpdate(req.user.profile,
       { $push: {posts: post} },
