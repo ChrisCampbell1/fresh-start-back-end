@@ -7,7 +7,7 @@ const index = async (req, res) => {
     const posts = await Post.find({})
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
-    posts.sort((a, b) => a.likes.length - b.likes.length)
+    posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
     res.status(200).json(posts)
   } catch (err) {
     console.log(err)
