@@ -37,7 +37,7 @@ const show = async (req, res) => {
     const post = await Post.findById(req.params.id)
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
-      .populate('comments.author', 'name')
+      .populate('comments.author', ['name', 'photo'])
     res.status(200).json(post)
   } catch (err) { 
     console.log(err);
