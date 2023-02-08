@@ -28,7 +28,6 @@ const show = async (req, res) => {
     const journey = await Journey.findById(req.params.id)
       .populate({path: 'subscribers', select: ['name', 'journeys']})
       .populate('reviews.author', ['name', 'photo'])
-    console.log(`Retrieved journey:`, journey)
     res.status(200).json(journey)
   } catch (err) {
     res.status(500).json(err)

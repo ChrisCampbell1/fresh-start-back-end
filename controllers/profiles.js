@@ -33,6 +33,7 @@ const show = async (req, res) => {
       .populate('following', ['name', 'photo'])
       .populate('journeys', 'name')
       .populate({path: 'posts', populate: {path: 'author', select: ['name', 'photo']}})
+      .populate({path: 'posts', populate: {path: 'journey', select: 'name'}})
     res.status(200).json(profile)
   } catch (err) {
     console.log(err)
