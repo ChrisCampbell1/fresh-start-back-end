@@ -71,12 +71,15 @@ const deletePost = async (req, res) => {
 const addLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    const userProfile = req.user.profile;
+      .populate('author', ['name', 'photo'])
+      .populate('journey', 'name')
+      .populate('comments.author', 'name')
+    const userProfile = req.user.profile
     const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
     if (index === -1) {
       post.likes.push(userProfile)
       await post.save()
-      res.status(204).json({ msg: 'OK' })
+      res.status(200).json(post)
     } else {
       res.status(400).json({ msg: 'Duplicate like from the same user' })
     }
@@ -89,12 +92,15 @@ const addLike = async (req, res) => {
 const removeLike = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    const userProfile = req.user.profile;
+      .populate('author', ['name', 'photo'])
+      .populate('journey', 'name')
+      .populate('comments.author', 'name')
+    const userProfile = req.user.profile
     const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
     if (index !== -1) {
       post.likes.pull(userProfile)
       await post.save()
-      res.status(204).json({ msg: 'OK' })
+      res.status(200).json(post)
     } else {
       res.status(400).json({ msg: 'Profile not found in the likes array' })
     }
