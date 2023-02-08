@@ -38,6 +38,7 @@ const show = async (req, res) => {
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
       .populate('comments.author', ['name', 'photo'])
+    post.comments.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
     res.status(200).json(post)
   } catch (err) { 
     console.log(err);
