@@ -1,1 +1,1 @@
-## [FreshStart Details](https://github.com/robfrid06/fresh-start-front-end)
+## [More Details on FreshStart](https://github.com/robfrid06/fresh-start-front-end)
