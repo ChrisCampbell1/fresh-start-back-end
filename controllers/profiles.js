@@ -5,6 +5,7 @@ const index = async (req, res) => {
   try {
     const profiles = await Profile.find({})
       .populate('journeys', ['name', 'photo'])
+    profiles.sort((a, b) => b.followers.length - a.followers.length)
     res.json(profiles)
   } catch (err) {
     console.log(err);
