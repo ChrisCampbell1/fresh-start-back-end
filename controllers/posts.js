@@ -74,7 +74,8 @@ const addLike = async (req, res) => {
     const post = await Post.findById(req.params.id)
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
-      .populate('comments.author', 'name')
+      .populate('comments.author', ['name', 'photo'])
+    post.comments.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
     const userProfile = req.user.profile
     const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
     if (index === -1) {
@@ -95,7 +96,8 @@ const removeLike = async (req, res) => {
     const post = await Post.findById(req.params.id)
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
-      .populate('comments.author', 'name')
+      .populate('comments.author', ['name', 'photo'])
+    post.comments.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
     const userProfile = req.user.profile
     const index = post.likes.findIndex(profile => profile.toString() === userProfile.toString());
     if (index !== -1) {
