@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary'
 const index = async (req, res) => {
   try {
     const profile = await Profile.findById(req.user.profile)
-    const posts = await Post.find({ author: profile.following })
+    const posts = await Post.find({ author: { $in: [...profile.following, req.user.profile] } })
       .populate('author', ['name', 'photo'])
       .populate('journey', 'name')
     posts.sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
